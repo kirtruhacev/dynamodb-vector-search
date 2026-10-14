@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: DynamoDB table storing publications with a vector index over their embedding
+
+Parameters:
+  TableName:
+    Type: String
+    Default: publications
+    Description: Name of the publications table
+
+Resources:
+  PublicationsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Ref TableName
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK0
+          AttributeType: S
+        - AttributeName: SK0
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK0
+          KeyType: HASH
+        - AttributeName: SK0
+          KeyType: RANGE
+      VectorIndexes:
+        - IndexName: PublicationEmbeddingIndex
+          VectorAttribute:
+            AttributeName: embedding
+          Dimensions: 1024
+          DistanceFunction: COSINE
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - data
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      DeletionProtectionEnabled: true
+
+Outputs:
+  PublicationsTableName:
+    Description: Name of the publications table
+    Value: !Ref PublicationsTable
+  PublicationsTableArn:
+    Description: ARN of the publications table
+    Value: !GetAtt PublicationsTable.Arn
