@@ -38,3 +38,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+### DynamoDB Local ###
+dynamodb-local-metadata.json
