@@ -5,10 +5,12 @@ import static dynamodb.vector.search.fixtures.PublicationFixtures.randomPublicat
 import static dynamodb.vector.search.persistence.PublicationTable.EMBEDDING_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.PARTITION_KEY;
 import static dynamodb.vector.search.persistence.PublicationTable.SORT_KEY;
+import static dynamodb.vector.search.persistence.PublicationTable.VECTOR_INDEX_NAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import dynamodb.vector.search.domain.Embedding;
+import dynamodb.vector.search.domain.Publication;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +27,9 @@ import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement;
 import software.amazon.awssdk.services.dynamodb.model.KeyType;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
+import software.amazon.awssdk.services.dynamodb.model.SearchResultItem;
+import software.amazon.awssdk.services.dynamodb.model.SearchVectorsRequest;
+import software.amazon.awssdk.services.dynamodb.model.SearchVectorsResponse;
 import software.amazon.dynamodb.services.local.embedded.DynamoDBEmbedded;
 import software.amazon.dynamodb.services.local.shared.access.AmazonDynamoDBLocal;
 
@@ -83,6 +88,43 @@ class PublicationRepositoryTest {
     private Map<String, AttributeValue> storedItem(UUID identifier) {
         var request = GetItemRequest.builder().tableName(TABLE_NAME).key(PublicationDao.keyOf(identifier)).build();
         return client.getItem(request).item();
+    }
+
+    @Test
+    void shouldSearchForPublications() {
+        var searchClient = new RecordingDynamoDbClient(SearchVectorsResponse.builder().build());
+
+        new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING);
+
+        assertThat(searchClient.recordedRequest(), is(equalTo(expectedSearchRequest())));
+    }
+
+    @Test
+    void shouldMapSearchResultsToPublications() {
+        var publication = randomPublication();
+        var searchClient = new RecordingDynamoDbClient(searchResponseWith(publication));
+
+        var found = new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING);
+
+        assertThat(found, is(equalTo(List.of(publication))));
+    }
+
+    private static SearchVectorsRequest expectedSearchRequest() {
+        return SearchVectorsRequest.builder()
+                   .tableName(TABLE_NAME)
+                   .indexName(VECTOR_INDEX_NAME)
+                   .topK(100)
+                   .searchVector(AttributeValue.fromN("0.1"),
+                                 AttributeValue.fromN("-0.2"),
+                                 AttributeValue.fromN("1.6194582E-4"))
+                   .build();
+    }
+
+    private static SearchVectorsResponse searchResponseWith(Publication publication) {
+        var item = PublicationDao.fromPublication(publication).toItem(EMBEDDING);
+        return SearchVectorsResponse.builder()
+                   .searchResults(SearchResultItem.builder().item(item).score(0.9).build())
+                   .build();
     }
 
     private static CreateTableRequest createTableRequest() {

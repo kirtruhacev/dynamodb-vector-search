@@ -27,8 +27,8 @@ record PublicationDao(UUID identifier, PublicationData data) {
         return new PublicationDao(publication.identifier(), data);
     }
 
-    static PublicationDao fromItem(UUID identifier, Map<String, AttributeValue> item) {
-        return new PublicationDao(identifier, readData(item.get(DATA_ATTRIBUTE).s()));
+    static PublicationDao fromItem(Map<String, AttributeValue> item) {
+        return new PublicationDao(identifierOf(item), readData(item.get(DATA_ATTRIBUTE).s()));
     }
 
     static Map<String, AttributeValue> keyOf(UUID identifier) {
@@ -47,7 +47,11 @@ record PublicationDao(UUID identifier, PublicationData data) {
         return new Publication(identifier, data.title(), data.description(), data.contributors());
     }
 
-    private static List<AttributeValue> embeddingNumbers(Embedding embedding) {
+    private static UUID identifierOf(Map<String, AttributeValue> item) {
+        return UUID.fromString(item.get(PARTITION_KEY).s().substring(PARTITION_KEY_PREFIX.length()));
+    }
+
+    static List<AttributeValue> embeddingNumbers(Embedding embedding) {
         return embedding.values().stream().map(value -> AttributeValue.fromN(value.toString())).toList();
     }
 

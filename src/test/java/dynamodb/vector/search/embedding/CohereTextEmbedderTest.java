@@ -41,6 +41,13 @@ class CohereTextEmbedderTest {
     }
 
     @Test
+    void shouldRequestQueryEmbeddingForGivenText() {
+        embedder.embedQuery(TEXT_TO_EMBED);
+
+        assertThat(client.recordedRequest().body().asUtf8String(), is(equalTo(queryEmbeddingBody())));
+    }
+
+    @Test
     void shouldThrowWhenModelReturnsNoEmbedding() {
         var embedder = new CohereTextEmbedder(new RecordingBedrockRuntimeClient(responseWithoutEmbeddings()));
 
@@ -52,6 +59,11 @@ class CohereTextEmbedderTest {
     private static String documentEmbeddingBody() {
         return """
             {"texts":["%s"],"input_type":"search_document","truncate":"END"}""".formatted(TEXT_TO_EMBED);
+    }
+
+    private static String queryEmbeddingBody() {
+        return """
+            {"texts":["%s"],"input_type":"search_query","truncate":"END"}""".formatted(TEXT_TO_EMBED);
     }
 
     private static InvokeModelResponse responseWithoutEmbeddings() {

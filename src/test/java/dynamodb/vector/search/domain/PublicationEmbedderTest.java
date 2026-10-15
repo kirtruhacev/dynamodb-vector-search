@@ -22,7 +22,7 @@ class PublicationEmbedderTest {
 
         new PublicationEmbedder(textEmbedder).embed(publication);
 
-        assertThat(textEmbedder.recordedText(), is(equalTo(labelledText(publication))));
+        assertThat(textEmbedder.recordedDocumentText(), is(equalTo(labelledText(publication))));
     }
 
     @Test
@@ -32,7 +32,7 @@ class PublicationEmbedderTest {
 
         new PublicationEmbedder(textEmbedder).embed(publicationWithContributorsFrom(organization));
 
-        assertThat(textEmbedder.recordedText(), endsWith("Institutions: " + organization.name()));
+        assertThat(textEmbedder.recordedDocumentText(), endsWith("Institutions: " + organization.name()));
     }
 
     @Test

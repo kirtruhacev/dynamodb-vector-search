@@ -6,6 +6,7 @@ public final class PublicationTable {
     public static final String SORT_KEY = "SK0";
     public static final String DATA_ATTRIBUTE = "data";
     public static final String EMBEDDING_ATTRIBUTE = "embedding";
+    public static final String VECTOR_INDEX_NAME = "PublicationEmbeddingIndex";
 
     private PublicationTable() {
     }
