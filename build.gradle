@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation platform('software.amazon.awssdk:bom:2.55.12')
     implementation 'software.amazon.awssdk:dynamodb'
+    implementation 'software.amazon.awssdk:bedrockruntime'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.3'
 
     testImplementation platform('org.junit:junit-bom:6.0.0')
