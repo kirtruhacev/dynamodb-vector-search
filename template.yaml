@@ -10,8 +10,8 @@ Parameters:
 Resources:
   PublicationsTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
     Properties:
       TableName: !Ref TableName
       BillingMode: PAY_PER_REQUEST
@@ -35,9 +35,6 @@ Resources:
             ProjectionType: INCLUDE
             NonKeyAttributes:
               - data
-      PointInTimeRecoverySpecification:
-        PointInTimeRecoveryEnabled: true
-      DeletionProtectionEnabled: true
 
 Outputs:
   PublicationsTableName:

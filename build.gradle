@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'java-test-fixtures'
+    id 'application'
 }
 
 group = 'dynamodb.vector.search'
@@ -10,6 +11,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
     }
+}
+
+application {
+    mainClass = 'dynamodb.vector.search.Main'
 }
 
 repositories {

@@ -1,0 +1,184 @@
+[
+  {
+    "identifier": "289faa0e-5272-4b08-8337-173ad96f206a",
+    "title": "Deep learning for tumour detection in mammography screening",
+    "description": "A convolutional model trained on twelve years of national screening images, compared against the reading of two independent radiologists.",
+    "contributors": [
+      {
+        "identifier": "7e5a68e0-cc57-4358-8859-4dad77e51c1c",
+        "name": "Ingrid Halvorsen",
+        "organization": {
+          "identifier": "0d6c9830-1bef-4da3-b02d-bb37dcf30f1a",
+          "name": "University of Oslo"
+        }
+      },
+      {
+        "identifier": "567d37a4-5a5c-4fb0-b056-e89613c2973f",
+        "name": "Mateusz Zielinski",
+        "organization": {
+          "identifier": "c42aa8f1-937b-4219-a0f5-10d260a25341",
+          "name": "Norwegian University of Science and Technology"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "1a09fa6f-f5e2-4aae-a896-73b97ae5892a",
+    "title": "Approximate nearest neighbour search over billion-scale embeddings",
+    "description": "Graph based indexes are compared with inverted file methods on recall, latency and memory footprint when the vectors no longer fit in memory.",
+    "contributors": [
+      {
+        "identifier": "97f125e0-1759-4d7a-9812-e489d21f2b0a",
+        "name": "Sanjay Varma",
+        "organization": {
+          "identifier": "b469a628-b3ec-49a6-891d-998a6d9dd349",
+          "name": "SINTEF Digital"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "b7cc17ee-1ca6-4a9a-bdbb-f7f22f9a6706",
+    "title": "Sea ice thickness in the Barents Sea from four decades of satellite altimetry",
+    "description": "A reanalysis of radar altimetry records showing an accelerating thinning trend north of Svalbard and its coupling to winter storm tracks.",
+    "contributors": [
+      {
+        "identifier": "1daf338e-e6e4-44ac-b936-18d6b735435e",
+        "name": "Kari Nystuen",
+        "organization": {
+          "identifier": "027fef8e-fb6c-4bc0-9b92-26f760258917",
+          "name": "Institute of Marine Research"
+        }
+      },
+      {
+        "identifier": "3b867a96-5081-4c0f-8de2-b6d1d753bef3",
+        "name": "Lars Eide",
+        "organization": {
+          "identifier": "027fef8e-fb6c-4bc0-9b92-26f760258917",
+          "name": "Institute of Marine Research"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "6e68b12b-c6a9-44ac-9ae4-12bab5bd2caf",
+    "title": "Pretraining language models on Bokmål and Nynorsk web text",
+    "description": "The effect of dialect balance in the pretraining corpus on downstream question answering for both written standards of Norwegian.",
+    "contributors": [
+      {
+        "identifier": "aae669db-7c4c-433b-84b6-0a46d8be8831",
+        "name": "Sigrid Moen",
+        "organization": {
+          "identifier": "0d6c9830-1bef-4da3-b02d-bb37dcf30f1a",
+          "name": "University of Oslo"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "07e5ea6c-555e-488e-ae1e-6481fabe5ef8",
+    "title": "Fatigue cracking in monopile foundations for offshore wind",
+    "description": "Strain gauge measurements from three North Sea turbines are used to recalibrate the load models that drive inspection intervals.",
+    "contributors": [
+      {
+        "identifier": "0e7f4bc4-aaec-4a74-8b65-a1022caba2a1",
+        "name": "Henrik Aalborg",
+        "organization": {
+          "identifier": "b469a628-b3ec-49a6-891d-998a6d9dd349",
+          "name": "SINTEF Digital"
+        }
+      },
+      {
+        "identifier": "eb26fe88-cb89-4238-9134-a45e76e9f1e4",
+        "name": "Petra Lindqvist",
+        "organization": {
+          "identifier": "c42aa8f1-937b-4219-a0f5-10d260a25341",
+          "name": "Norwegian University of Science and Technology"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "64180309-4c13-4980-b7f4-41a5d0fa9ef6",
+    "title": "Sea lice resistance in farmed Atlantic salmon",
+    "description": "A breeding study across eleven cohorts estimating the heritability of louse counts and the cost of selection on growth rate.",
+    "contributors": [
+      {
+        "identifier": "516c44d3-0cb0-4bb4-ac15-bc9f4ae3ecc8",
+        "name": "Tor Rasmussen",
+        "organization": {
+          "identifier": "027fef8e-fb6c-4bc0-9b92-26f760258917",
+          "name": "Institute of Marine Research"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "87121696-9e5c-47e0-9daf-bd0327c3a849",
+    "title": "Surface codes under correlated noise in superconducting qubits",
+    "description": "Simulations of error correction thresholds when crosstalk breaks the independence assumption that the standard decoder relies on.",
+    "contributors": [
+      {
+        "identifier": "4c4ad08e-e754-4008-a7a4-b1c1a32549e3",
+        "name": "Elif Demir",
+        "organization": {
+          "identifier": "c42aa8f1-937b-4219-a0f5-10d260a25341",
+          "name": "Norwegian University of Science and Technology"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "9434fb46-683e-486e-8c1e-52a42f3d40c4",
+    "title": "Scribal hands in thirteenth century Icelandic manuscripts",
+    "description": "Digitised vellum pages are clustered by letterform geometry to argue that two sagas were copied in the same scriptorium.",
+    "contributors": [
+      {
+        "identifier": "aefdb26a-e03a-44fc-8dce-25af13bc7ed8",
+        "name": "Guðrún Jónsdóttir",
+        "organization": {
+          "identifier": "0d6c9830-1bef-4da3-b02d-bb37dcf30f1a",
+          "name": "University of Oslo"
+        }
+      },
+      {
+        "identifier": "625bd313-4758-43cc-a0f5-05ad30346ce5",
+        "name": "Anne Bergfjord",
+        "organization": {
+          "identifier": "0d6c9830-1bef-4da3-b02d-bb37dcf30f1a",
+          "name": "University of Oslo"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "8e5c36c2-0e42-4d15-8315-b6be53586e2e",
+    "title": "Ingrid Halvorsen's field notes on alpine botany in Jotunheimen",
+    "description": "Plant surveys recorded over thirty summers above the treeline, transcribed and matched to modern vegetation plots.",
+    "contributors": [
+      {
+        "identifier": "d471fe9d-64fb-4387-8763-ff24cf73ceca",
+        "name": "Olav Strand",
+        "organization": {
+          "identifier": "f3399059-7287-46b2-a898-f45bbc375ec1",
+          "name": "Norwegian Institute for Nature Research"
+        }
+      }
+    ]
+  },
+  {
+    "identifier": "1e7fe3b3-86e9-487c-aaab-edbd896dc64a",
+    "title": "A history of SINTEF and the postwar industrial laboratories",
+    "description": "How contract research institutes were funded and governed in Norway between 1950 and 1980.",
+    "contributors": [
+      {
+        "identifier": "71a2ad0e-1c78-4ea2-adfc-29c3bc23e7e3",
+        "name": "Mette Fjeld",
+        "organization": {
+          "identifier": "e9540e7b-0a6b-48af-a139-1ef6d8aa37aa",
+          "name": "BI Norwegian Business School"
+        }
+      }
+    ]
+  }
+]
