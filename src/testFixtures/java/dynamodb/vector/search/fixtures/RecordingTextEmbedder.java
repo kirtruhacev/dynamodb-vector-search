@@ -6,7 +6,8 @@ import dynamodb.vector.search.domain.TextEmbedder;
 public class RecordingTextEmbedder implements TextEmbedder {
 
     private final Embedding embedding;
-    private String recordedText;
+    private String recordedDocumentText;
+    private String recordedQueryText;
 
     public RecordingTextEmbedder(Embedding embedding) {
         this.embedding = embedding;
@@ -14,11 +15,21 @@ public class RecordingTextEmbedder implements TextEmbedder {
 
     @Override
     public Embedding embedDocument(String text) {
-        recordedText = text;
+        recordedDocumentText = text;
         return embedding;
     }
 
-    public String recordedText() {
-        return recordedText;
+    @Override
+    public Embedding embedQuery(String text) {
+        recordedQueryText = text;
+        return embedding;
+    }
+
+    public String recordedDocumentText() {
+        return recordedDocumentText;
+    }
+
+    public String recordedQueryText() {
+        return recordedQueryText;
     }
 }

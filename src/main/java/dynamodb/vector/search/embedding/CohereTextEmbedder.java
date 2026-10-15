@@ -16,6 +16,7 @@ public class CohereTextEmbedder implements TextEmbedder {
 
     private static final String MODEL_ID = "cohere.embed-multilingual-v3";
     private static final String DOCUMENT_INPUT_TYPE = "search_document";
+    private static final String QUERY_INPUT_TYPE = "search_query";
     private static final String TRUNCATE_END = "END";
     private static final String NO_EMBEDDING_MESSAGE = "No embedding returned by model " + MODEL_ID;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -28,7 +29,16 @@ public class CohereTextEmbedder implements TextEmbedder {
 
     @Override
     public Embedding embedDocument(String text) {
-        var request = new CohereEmbeddingRequest(List.of(text), DOCUMENT_INPUT_TYPE, TRUNCATE_END);
+        return embed(text, DOCUMENT_INPUT_TYPE);
+    }
+
+    @Override
+    public Embedding embedQuery(String text) {
+        return embed(text, QUERY_INPUT_TYPE);
+    }
+
+    private Embedding embed(String text, String inputType) {
+        var request = new CohereEmbeddingRequest(List.of(text), inputType, TRUNCATE_END);
         var response = client.invokeModel(invokeModelRequest(request));
         return new Embedding(firstEmbedding(readResponse(response)));
     }
