@@ -1,14 +1,17 @@
 package dynamodb.vector.search.persistence;
 
 import static dynamodb.vector.search.persistence.PublicationTable.DATA_ATTRIBUTE;
+import static dynamodb.vector.search.persistence.PublicationTable.EMBEDDING_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.PARTITION_KEY;
 import static dynamodb.vector.search.persistence.PublicationTable.SORT_KEY;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dynamodb.vector.search.domain.Embedding;
 import dynamodb.vector.search.domain.Publication;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -33,14 +36,19 @@ record PublicationDao(UUID identifier, PublicationData data) {
                       SORT_KEY, AttributeValue.fromS(SORT_KEY_VALUE));
     }
 
-    Map<String, AttributeValue> toItem() {
+    Map<String, AttributeValue> toItem(Embedding embedding) {
         var item = new HashMap<>(keyOf(identifier));
         item.put(DATA_ATTRIBUTE, AttributeValue.fromS(writeData(data)));
+        item.put(EMBEDDING_ATTRIBUTE, AttributeValue.fromL(embeddingNumbers(embedding)));
         return Map.copyOf(item);
     }
 
     Publication toPublication() {
         return new Publication(identifier, data.title(), data.description(), data.contributors());
+    }
+
+    private static List<AttributeValue> embeddingNumbers(Embedding embedding) {
+        return embedding.values().stream().map(value -> AttributeValue.fromN(value.toString())).toList();
     }
 
     private static String writeData(PublicationData data) {

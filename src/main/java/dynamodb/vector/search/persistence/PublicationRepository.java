@@ -1,5 +1,6 @@
 package dynamodb.vector.search.persistence;
 
+import dynamodb.vector.search.domain.Embedding;
 import dynamodb.vector.search.domain.Publication;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,8 +18,8 @@ public class PublicationRepository {
         this.tableName = tableName;
     }
 
-    public void save(Publication publication) {
-        var item = PublicationDao.fromPublication(publication).toItem();
+    public void save(Publication publication, Embedding embedding) {
+        var item = PublicationDao.fromPublication(publication).toItem(embedding);
         client.putItem(PutItemRequest.builder().tableName(tableName).item(item).build());
     }
 
