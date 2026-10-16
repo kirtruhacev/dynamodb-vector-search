@@ -3,12 +3,14 @@ package dynamodb.vector.search.persistence;
 import static dynamodb.vector.search.persistence.PublicationTable.DATA_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.EMBEDDING_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.PARTITION_KEY;
+import static dynamodb.vector.search.persistence.PublicationTable.PUBLICATION_TYPE_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.SORT_KEY;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dynamodb.vector.search.domain.Embedding;
 import dynamodb.vector.search.domain.Publication;
+import dynamodb.vector.search.domain.PublicationType;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-record PublicationDao(UUID identifier, PublicationData data) {
+record PublicationDao(UUID identifier, PublicationType publicationType, PublicationData data) {
 
     private static final String PARTITION_KEY_PREFIX = "PUBLICATION#";
     private static final String SORT_KEY_VALUE = "PUBLICATION";
@@ -24,11 +26,11 @@ record PublicationDao(UUID identifier, PublicationData data) {
 
     static PublicationDao fromPublication(Publication publication) {
         var data = new PublicationData(publication.title(), publication.description(), publication.contributors());
-        return new PublicationDao(publication.identifier(), data);
+        return new PublicationDao(publication.identifier(), publication.publicationType(), data);
     }
 
     static PublicationDao fromItem(Map<String, AttributeValue> item) {
-        return new PublicationDao(identifierOf(item), readData(item.get(DATA_ATTRIBUTE).s()));
+        return new PublicationDao(identifierOf(item), publicationTypeOf(item), readData(item.get(DATA_ATTRIBUTE).s()));
     }
 
     static Map<String, AttributeValue> keyOf(UUID identifier) {
@@ -39,12 +41,17 @@ record PublicationDao(UUID identifier, PublicationData data) {
     Map<String, AttributeValue> toItem(Embedding embedding) {
         var item = new HashMap<>(keyOf(identifier));
         item.put(DATA_ATTRIBUTE, AttributeValue.fromS(writeData(data)));
+        item.put(PUBLICATION_TYPE_ATTRIBUTE, AttributeValue.fromS(publicationType.name()));
         item.put(EMBEDDING_ATTRIBUTE, AttributeValue.fromL(embeddingNumbers(embedding)));
         return Map.copyOf(item);
     }
 
     Publication toPublication() {
-        return new Publication(identifier, data.title(), data.description(), data.contributors());
+        return new Publication(identifier, data.title(), data.description(), publicationType, data.contributors());
+    }
+
+    private static PublicationType publicationTypeOf(Map<String, AttributeValue> item) {
+        return PublicationType.valueOf(item.get(PUBLICATION_TYPE_ATTRIBUTE).s());
     }
 
     private static UUID identifierOf(Map<String, AttributeValue> item) {

@@ -3,6 +3,7 @@
     "identifier": "289faa0e-5272-4b08-8337-173ad96f206a",
     "title": "Deep learning for tumour detection in mammography screening",
     "description": "A convolutional model trained on twelve years of national screening images, compared against the reading of two independent radiologists.",
+    "publicationType": "ARTICLE",
     "contributors": [
       {
         "identifier": "7e5a68e0-cc57-4358-8859-4dad77e51c1c",
@@ -26,6 +27,7 @@
     "identifier": "1a09fa6f-f5e2-4aae-a896-73b97ae5892a",
     "title": "Approximate nearest neighbour search over billion-scale embeddings",
     "description": "Graph based indexes are compared with inverted file methods on recall, latency and memory footprint when the vectors no longer fit in memory.",
+    "publicationType": "ARTICLE",
     "contributors": [
       {
         "identifier": "97f125e0-1759-4d7a-9812-e489d21f2b0a",
@@ -41,6 +43,7 @@
     "identifier": "b7cc17ee-1ca6-4a9a-bdbb-f7f22f9a6706",
     "title": "Sea ice thickness in the Barents Sea from four decades of satellite altimetry",
     "description": "A reanalysis of radar altimetry records showing an accelerating thinning trend north of Svalbard and its coupling to winter storm tracks.",
+    "publicationType": "ARTICLE",
     "contributors": [
       {
         "identifier": "1daf338e-e6e4-44ac-b936-18d6b735435e",
@@ -64,6 +67,7 @@
     "identifier": "6e68b12b-c6a9-44ac-9ae4-12bab5bd2caf",
     "title": "Pretraining language models on Bokmål and Nynorsk web text",
     "description": "The effect of dialect balance in the pretraining corpus on downstream question answering for both written standards of Norwegian.",
+    "publicationType": "ARTICLE",
     "contributors": [
       {
         "identifier": "aae669db-7c4c-433b-84b6-0a46d8be8831",
@@ -79,6 +83,7 @@
     "identifier": "07e5ea6c-555e-488e-ae1e-6481fabe5ef8",
     "title": "Fatigue cracking in monopile foundations for offshore wind",
     "description": "Strain gauge measurements from three North Sea turbines are used to recalibrate the load models that drive inspection intervals.",
+    "publicationType": "REPORT",
     "contributors": [
       {
         "identifier": "0e7f4bc4-aaec-4a74-8b65-a1022caba2a1",
@@ -102,6 +107,7 @@
     "identifier": "64180309-4c13-4980-b7f4-41a5d0fa9ef6",
     "title": "Sea lice resistance in farmed Atlantic salmon",
     "description": "A breeding study across eleven cohorts estimating the heritability of louse counts and the cost of selection on growth rate.",
+    "publicationType": "REPORT",
     "contributors": [
       {
         "identifier": "516c44d3-0cb0-4bb4-ac15-bc9f4ae3ecc8",
@@ -117,6 +123,7 @@
     "identifier": "87121696-9e5c-47e0-9daf-bd0327c3a849",
     "title": "Surface codes under correlated noise in superconducting qubits",
     "description": "Simulations of error correction thresholds when crosstalk breaks the independence assumption that the standard decoder relies on.",
+    "publicationType": "ARTICLE",
     "contributors": [
       {
         "identifier": "4c4ad08e-e754-4008-a7a4-b1c1a32549e3",
@@ -132,6 +139,7 @@
     "identifier": "9434fb46-683e-486e-8c1e-52a42f3d40c4",
     "title": "Scribal hands in thirteenth century Icelandic manuscripts",
     "description": "Digitised vellum pages are clustered by letterform geometry to argue that two sagas were copied in the same scriptorium.",
+    "publicationType": "BOOK",
     "contributors": [
       {
         "identifier": "aefdb26a-e03a-44fc-8dce-25af13bc7ed8",
@@ -155,6 +163,7 @@
     "identifier": "8e5c36c2-0e42-4d15-8315-b6be53586e2e",
     "title": "Ingrid Halvorsen's field notes on alpine botany in Jotunheimen",
     "description": "Plant surveys recorded over thirty summers above the treeline, transcribed and matched to modern vegetation plots.",
+    "publicationType": "BOOK",
     "contributors": [
       {
         "identifier": "d471fe9d-64fb-4387-8763-ff24cf73ceca",
@@ -170,6 +179,7 @@
     "identifier": "1e7fe3b3-86e9-487c-aaab-edbd896dc64a",
     "title": "A history of SINTEF and the postwar industrial laboratories",
     "description": "How contract research institutes were funded and governed in Norway between 1950 and 1980.",
+    "publicationType": "BOOK",
     "contributors": [
       {
         "identifier": "71a2ad0e-1c78-4ea2-adfc-29c3bc23e7e3",

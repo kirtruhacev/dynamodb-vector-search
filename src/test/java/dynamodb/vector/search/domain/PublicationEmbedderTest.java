@@ -3,6 +3,7 @@ package dynamodb.vector.search.domain;
 import static dynamodb.vector.search.fixtures.PublicationFixtures.randomEmbedding;
 import static dynamodb.vector.search.fixtures.PublicationFixtures.randomOrganization;
 import static dynamodb.vector.search.fixtures.PublicationFixtures.randomPublication;
+import static dynamodb.vector.search.fixtures.PublicationFixtures.randomPublicationType;
 import static dynamodb.vector.search.fixtures.PublicationFixtures.randomString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.endsWith;
@@ -48,7 +49,8 @@ class PublicationEmbedderTest {
     private static Publication publicationWithContributorsFrom(Organization organization) {
         var contributors = List.of(new Contributor(UUID.randomUUID(), randomString(), organization),
                                    new Contributor(UUID.randomUUID(), randomString(), organization));
-        return new Publication(UUID.randomUUID(), randomString(), randomString(), contributors);
+        return new Publication(UUID.randomUUID(), randomString(), randomString(), randomPublicationType(),
+                               contributors);
     }
 
     private static String labelledText(Publication publication) {

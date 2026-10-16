@@ -4,6 +4,7 @@ import dynamodb.vector.search.domain.Embedding;
 import dynamodb.vector.search.domain.Organization;
 import dynamodb.vector.search.domain.Contributor;
 import dynamodb.vector.search.domain.Publication;
+import dynamodb.vector.search.domain.PublicationType;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,8 +18,13 @@ public final class PublicationFixtures {
     }
 
     public static Publication randomPublication() {
-        return new Publication(UUID.randomUUID(), randomString(), randomString(),
+        return new Publication(UUID.randomUUID(), randomString(), randomString(), randomPublicationType(),
                                List.of(randomContributor(), randomContributor()));
+    }
+
+    public static PublicationType randomPublicationType() {
+        var types = PublicationType.values();
+        return types[ThreadLocalRandom.current().nextInt(types.length)];
     }
 
     public static Contributor randomContributor() {

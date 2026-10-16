@@ -13,7 +13,7 @@ public class PublicationSearch {
         this.publicationRepository = publicationRepository;
     }
 
-    public List<Publication> search(String query) {
-        return publicationRepository.searchPublications(textEmbedder.embedQuery(query));
+    public List<Publication> search(String query, PublicationType publicationType) {
+        return publicationRepository.searchPublications(textEmbedder.embedQuery(query), publicationType);
     }
 }
