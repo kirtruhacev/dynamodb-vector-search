@@ -4,13 +4,17 @@ import static dynamodb.vector.search.fixtures.PublicationFixtures.randomEmbeddin
 import static dynamodb.vector.search.fixtures.PublicationFixtures.randomPublication;
 import static dynamodb.vector.search.persistence.PublicationTable.EMBEDDING_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.PARTITION_KEY;
+import static dynamodb.vector.search.persistence.PublicationTable.PUBLICATION_TYPE_ATTRIBUTE;
 import static dynamodb.vector.search.persistence.PublicationTable.SORT_KEY;
 import static dynamodb.vector.search.persistence.PublicationTable.VECTOR_INDEX_NAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 import dynamodb.vector.search.domain.Embedding;
 import dynamodb.vector.search.domain.Publication;
+import dynamodb.vector.search.domain.PublicationType;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -91,12 +95,32 @@ class PublicationRepositoryTest {
     }
 
     @Test
+    void shouldStorePublicationTypeAsTopLevelAttribute() {
+        var publication = randomPublication();
+
+        repository.save(publication, randomEmbedding());
+
+        assertThat(storedItem(publication.identifier()),
+                   hasEntry(PUBLICATION_TYPE_ATTRIBUTE,
+                            AttributeValue.fromS(publication.publicationType().name())));
+    }
+
+    @Test
     void shouldSearchForPublications() {
         var searchClient = new RecordingDynamoDbClient(SearchVectorsResponse.builder().build());
 
-        new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING);
+        new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING, null);
 
         assertThat(searchClient.recordedRequest(), is(equalTo(expectedSearchRequest())));
+    }
+
+    @Test
+    void shouldFilterSearchByPublicationType() {
+        var searchClient = new RecordingDynamoDbClient(SearchVectorsResponse.builder().build());
+
+        new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING, PublicationType.REPORT);
+
+        assertThat(searchClient.recordedRequest(), is(equalTo(expectedFilteredSearchRequest())));
     }
 
     @Test
@@ -104,7 +128,7 @@ class PublicationRepositoryTest {
         var publication = randomPublication();
         var searchClient = new RecordingDynamoDbClient(searchResponseWith(publication));
 
-        var found = new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING);
+        var found = new PublicationRepository(searchClient, TABLE_NAME).searchPublications(EMBEDDING, null);
 
         assertThat(found, is(equalTo(List.of(publication))));
     }
@@ -120,11 +144,23 @@ class PublicationRepositoryTest {
                    .build();
     }
 
-    private static SearchVectorsResponse searchResponseWith(Publication publication) {
-        var item = PublicationDao.fromPublication(publication).toItem(EMBEDDING);
-        return SearchVectorsResponse.builder()
-                   .searchResults(SearchResultItem.builder().item(item).score(0.9).build())
+    private static SearchVectorsRequest expectedFilteredSearchRequest() {
+        return expectedSearchRequest().toBuilder()
+                   .searchConditionExpression("publicationType = :publicationType")
+                   .expressionAttributeValues(Map.of(":publicationType", AttributeValue.fromS("REPORT")))
                    .build();
+    }
+
+    private static SearchVectorsResponse searchResponseWith(Publication publication) {
+        return SearchVectorsResponse.builder()
+                   .searchResults(SearchResultItem.builder().item(projectedItem(publication)).score(0.9).build())
+                   .build();
+    }
+
+    private static Map<String, AttributeValue> projectedItem(Publication publication) {
+        var item = new HashMap<>(PublicationDao.fromPublication(publication).toItem(EMBEDDING));
+        item.remove(EMBEDDING_ATTRIBUTE);
+        return Map.copyOf(item);
     }
 
     private static CreateTableRequest createTableRequest() {

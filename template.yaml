@@ -20,6 +20,8 @@ Resources:
           AttributeType: S
         - AttributeName: SK0
           AttributeType: S
+        - AttributeName: publicationType
+          AttributeType: S
       KeySchema:
         - AttributeName: PK0
           KeyType: HASH
@@ -29,6 +31,9 @@ Resources:
         - IndexName: PublicationEmbeddingIndex
           VectorAttribute:
             AttributeName: embedding
+          SearchSchema:
+            - AttributeName: publicationType
+              SearchSchemaElementType: INLINE_FILTER
           Dimensions: 1024
           DistanceFunction: COSINE
           Projection:

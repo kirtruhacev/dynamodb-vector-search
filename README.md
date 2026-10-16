@@ -26,14 +26,16 @@ Institutions: Institute of Marine Research
 The stored item keeps the data and the vector side by side:
 
 ```
-PK0        PUBLICATION#b7cc17ee-1ca6-4a9a-bdbb-f7f22f9a6706
-SK0        PUBLICATION
-data       {"title":"Sea ice thickness...","description":"...","contributors":[{"name":"Kari Nystuen",...}]}
-embedding  [0.0213, -0.1451, 0.0772, ...]   1024 numbers
+PK0             PUBLICATION#b7cc17ee-1ca6-4a9a-bdbb-f7f22f9a6706
+SK0             PUBLICATION
+publicationType ARTICLE
+data            {"title":"Sea ice thickness...","description":"...","contributors":[{"name":"Kari Nystuen",...}]}
+embedding       [0.0213, -0.1451, 0.0772, ...]   1024 numbers
 ```
 
-The index `PublicationEmbeddingIndex` is defined over `embedding` with `COSINE` distance and projects `data`,
-so a search returns everything needed to rebuild the publication without a second read.
+The index `PublicationEmbeddingIndex` is defined over `embedding` with `COSINE` distance and projects `data`.
+`publicationType` is declared in the index `SearchSchema` as an `INLINE_FILTER`, so DynamoDB keeps it beside
+each vector and projects it without being listed under `NonKeyAttributes`.
 
 ## Prerequisites
 
@@ -62,6 +64,15 @@ aws dynamodb describe-table --table-name publications --region eu-west-1 \
 
 The table is `publications`.
 
+Vector index properties cannot be updated in place — `SearchSchema`, `Projection`, `VectorAttribute`,
+`Dimensions` and `DistanceFunction` are all documented as "Updates are not supported". A stack deployed
+before `publicationType` existed therefore cannot be updated into one that has it: delete the stack and
+deploy again, then re-run the indexer to repopulate the ten items.
+
+```bash
+aws cloudformation delete-stack --stack-name dynamodb-vector-search --region eu-west-1
+```
+
 ## Run
 
 ```bash
@@ -78,8 +89,22 @@ b7cc17ee-1ca6-4a9a-bdbb-f7f22f9a6706  Sea ice thickness in the Barents Sea from 
 ...
 ```
 
-A query is required; without one it prints usage and does nothing. Identifiers are fixed, so re-running
-overwrites the same ten items. Each run costs eleven Bedrock calls: one per publication, one for the query.
+A query is required; without one it prints usage and does nothing, and a bare type with no query does the
+same. Identifiers are fixed, so re-running overwrites the same ten items. Each run costs eleven Bedrock
+calls: one per publication, one for the query.
+
+An optional publication type as the first argument restricts the search to that type:
+
+```bash
+AWS_PROFILE=<profile> ./gradlew run -q --console=plain --args="REPORT offshore wind"
+```
+
+The type is sent to `SearchVectors` as a `SearchConditionExpression` of `publicationType = :publicationType`,
+so DynamoDB skips non-matching vectors while it walks the index instead of filtering afterwards. Inline
+filters support `=` only, so it is one type per search — `ARTICLE`, `BOOK` or `REPORT`. Without a type the
+whole index is searched, exactly as before. The type must be given in uppercase, so a lowercase `report`
+stays an ordinary query word rather than a filter. It is never part of the embedded text, so it constrains
+which publications are considered but never influences their ranking.
 
 ## Test that it works
 

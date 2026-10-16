@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dynamodb.vector.search.domain.Publication;
 import dynamodb.vector.search.domain.PublicationEmbedder;
 import dynamodb.vector.search.domain.PublicationSearch;
+import dynamodb.vector.search.domain.PublicationType;
 import dynamodb.vector.search.embedding.CohereTextEmbedder;
 import dynamodb.vector.search.persistence.PublicationRepository;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
@@ -18,7 +20,8 @@ public final class Main {
 
     private static final String DATASET_RESOURCE = "/publications.json";
     private static final String TABLE_NAME = "publications";
-    private static final String USAGE_MESSAGE = "Usage: dynamodb-vector-search <query>";
+    private static final String USAGE_MESSAGE =
+        "Usage: dynamodb-vector-search [ARTICLE|BOOK|REPORT] <query>";
     private static final String ARGUMENT_SEPARATOR = " ";
     private static final String SEARCHING_MESSAGE = "Searching for: ";
     private static final String RESULT_SEPARATOR = "  ";
@@ -28,10 +31,11 @@ public final class Main {
     }
 
     public static void main(String... arguments) {
-        query(arguments).ifPresentOrElse(Main::indexAndSearch, () -> IO.println(USAGE_MESSAGE));
+        query(queryArguments(arguments))
+            .ifPresentOrElse(query -> indexAndSearch(query, arguments), () -> IO.println(USAGE_MESSAGE));
     }
 
-    private static void indexAndSearch(String query) {
+    private static void indexAndSearch(String query, String... arguments) {
         var textEmbedder = new CohereTextEmbedder(BedrockRuntimeClient.create());
         var publicationEmbedder = new PublicationEmbedder(textEmbedder);
         var repository = new PublicationRepository(DynamoDbClient.create(), TABLE_NAME);
@@ -39,7 +43,8 @@ public final class Main {
         publications().forEach(publication -> save(repository, publicationEmbedder, publication));
 
         IO.println(SEARCHING_MESSAGE + query);
-        new PublicationSearch(textEmbedder, repository).search(query).forEach(Main::print);
+        new PublicationSearch(textEmbedder, repository).search(query, publicationType(arguments).orElse(null))
+            .forEach(Main::print);
     }
 
     private static void save(PublicationRepository repository,
@@ -63,5 +68,21 @@ public final class Main {
 
     private static Optional<String> query(String... arguments) {
         return Optional.of(String.join(ARGUMENT_SEPARATOR, arguments)).filter(text -> !text.isBlank());
+    }
+
+    private static String[] queryArguments(String... arguments) {
+        return publicationType(arguments)
+                   .map(type -> Arrays.copyOfRange(arguments, 1, arguments.length))
+                   .orElse(arguments);
+    }
+
+    private static Optional<PublicationType> publicationType(String... arguments) {
+        return Arrays.stream(arguments).findFirst().flatMap(Main::publicationTypeNamed);
+    }
+
+    private static Optional<PublicationType> publicationTypeNamed(String name) {
+        return Arrays.stream(PublicationType.values())
+                   .filter(type -> type.name().equals(name))
+                   .findFirst();
     }
 }
